@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio Player</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 80px; }
+    button { padding: 8px 14px; margin: 4px; }
+  </style>
+</head>
+<body>
+
+  <h2>Audio Player</h2>
+
+  <input type="file" id="fileInput" accept="audio/*"><br><br>
+
+  <button onclick="audio.play()">Play</button>
+  <button onclick="audio.pause()">Pause</button>
+  <button onclick="audio.muted = !audio.muted">Mute</button>
+  <button onclick="audio.loop = !audio.loop">Loop</button>
+ 
+  <br><br>
+
+  <label>Volume: <input type="range" min="0" max="1" step="0.1" value="1" onchange="audio.volume = this.value"></label>
+  <label>Speed:
+    <select onchange="audio.playbackRate = this.value">
+      <option value="0.5">0.5x</option>
+      <option value="1" selected>1x</option>
+      <option value="1.5">1.5x</option>
+      <option value="2">2x</option>
+    </select>
+  </label>
+  <br><br>
+
+  <button onclick="audio.currentTime -= 10"><<</button>
+  <button onclick="audio.currentTime += 10">>></button>
+  <br><br>
+
+  <p id="time">0:00 / 0:00</p>
+
+  <audio id="audio"></audio>
+
+  <script>
+    document.getElementById("fileInput").addEventListener("change", function() {
+      audio.src = URL.createObjectURL(this.files[0]);
+    });
+
+    audio.addEventListener("timeupdate", function() {
+      var c = Math.floor(audio.currentTime), t = Math.floor(audio.duration);
+      document.getElementById("time").textContent =
+        Math.floor(c/60) + ":" + String(c%60).padStart(2,"0") + " / " +
+        Math.floor(t/60) + ":" + String(t%60).padStart(2,"0");
+    });
+  </script>
+
+</body>
+</html>
